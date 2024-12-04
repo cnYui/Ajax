@@ -13,22 +13,25 @@
     </style>
   </head>
   <body>
-    <div id="result" id="result"></div>
+    <button id="btn">点击</button>
+    <div id="result"></div>
     <script>
+      const btn = document.getElementById("btn");
       const result = document.getElementById("result");
-      result.addEventListener("mouseover", () => {
-        //1.创建对象
+      btn.addEventListener("click", () => {
         const xhr = new XMLHttpRequest();
-        //2.初始化 设置请求方法和url
-        xhr.open("POST", "http://localhost:8000/server");
-        //设置请求头
-        xhr.setRequestHeader(
-          "Content-Type",
-          "application/x-www-form-urlencoded"
-        );
-        //3.发送
-        xhr.send("a=100&b=100&c=100");
-        //4.事件绑定
+        xhr.open("GET", "http://localhost:8000/delay");
+        //超时回调
+        xhr.timeout = 5000;
+        xhr.ontimeout = () => {
+          alert("请求超时");
+        };
+
+        //网络异常回调
+        xhr.onerror = () => {
+          alert("网络异常");
+        };
+
         xhr.onreadystatechange = () => {
           if (xhr.readyState === 4) {
             if (xhr.status >= 200 && xhr.status < 300) {
@@ -36,10 +39,6 @@
             }
           }
         };
-      });
-
-      result.addEventListener("mouseout", () => {
-        result.innerHTML = "";
       });
     </script>
   </body>
