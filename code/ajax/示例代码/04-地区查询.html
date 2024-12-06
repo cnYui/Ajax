@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Location Form</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/cerulean/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <form>
+        <div class="row mb-3">
+          <div class="col">
+            <label for="province" class="form-label">省份名字</label>
+            <input
+              type="text"
+              class="form-control"
+              id="province"
+              placeholder="北京"
+            />
+          </div>
+          <div class="col">
+            <label for="city" class="form-label">城市名字</label>
+            <input
+              type="text"
+              class="form-control"
+              id="city"
+              placeholder="北京市"
+            />
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">查询</button>
+      </form>
+      <div class="mt-3">
+        <label class="text-dark fs-5">地区列表:</label>
+        <table class="table table-bordered mt-2">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">地区名称</th>
+            </tr>
+          </thead>
+          <tbody id="regionList">
+            <!-- Region data will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      // Handle form submit event (triggered by both button click and Enter key)
+      document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const province = document.querySelector('#province').value;
+        const city = document.querySelector('#city').value;
+        
+        axios({
+          method: 'get',
+          url: 'http://hmajax.itheima.net/api/area',
+          params: {
+            pname: province,
+            cname: city
+          }
+        }).then(res => {
+          const regions = res.data.list;
+          const tbody = document.querySelector('#regionList');
+          tbody.innerHTML = regions.map((region, index) => `
+            <tr>
+              <th scope="row">${index + 1}</th>
+              <td>${region}</td>
+            </tr>
+          `).join('');
+        });
+      });
+
+      // Add keypress event listeners to input fields
+      document.querySelector('#city').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          document.querySelector('button[type="submit"]').click();
+        }
+      });
+    </script>
+  </body>
+</html>

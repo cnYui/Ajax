@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme Toggle Login Page</title>
+    <!-- Flatly Theme (default) -->
+    <link
+      id="themeStylesheet"
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css"
+    />
+    <style>
+      /* Custom styles for the theme toggle button */
+      .theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+      .theme-toggle.sun {
+        background-color: white;
+        color: gold;
+      }
+      .theme-toggle.moon {
+        background-color: #444;
+        color: lightgray;
+      }
+      /* Add transition for theme changes */
+      body {
+        transition: background-color 0.3s ease, color 0.3s ease;
+        overflow: hidden;
+      }
+      .card {
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+        z-index: 1;
+      }
+      input,
+      button {
+        transition: background-color 0.3s ease, border-color 0.3s ease,
+          color 0.3s ease;
+      }
+
+      /* Night sky and stars styles */
+      .night-sky {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+      
+      /* Static stars */
+      .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 1s infinite alternate;
+      }
+
+      @keyframes twinkle {
+        0% { opacity: 0.3; }
+        100% { opacity: 1; }
+      }
+      
+      .shooting-star {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: white;
+        border-radius: 50%;
+        animation: shooting 3s linear infinite;
+        opacity: 0;
+      }
+
+      .shooting-star::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100px;
+        height: 2px;
+        background: linear-gradient(90deg, white, transparent);
+        right: 4px;
+      }
+
+      @keyframes shooting {
+        0% {
+          transform: translate(120vw, -40vh) rotate(-45deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translate(-20vw, 100vh) rotate(-45deg);
+          opacity: 0;
+        }
+      }
+
+      .shooting-star:nth-child(1) { 
+        animation-delay: 0s;
+        top: 0%;
+        left: random(100%);
+      }
+      .shooting-star:nth-child(2) { 
+        animation-delay: 1.6s;
+        top: 10%;
+        left: random(100%);
+      }
+      .shooting-star:nth-child(3) { 
+        animation-delay: 3.2s;
+        top: 5%;
+        left: random(100%);
+      }
+      .shooting-star:nth-child(4) { 
+        animation-delay: 4.8s;
+        top: 15%;
+        left: random(100%);
+      }
+      .shooting-star:nth-child(5) { 
+        animation-delay: 6.4s;
+        top: 8%;
+        left: random(100%);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Night Sky with Stars -->
+    <div class="night-sky" id="nightSky">
+      <!-- Shooting stars -->
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <!-- Static stars will be added dynamically -->
+    </div>
+
+    <!-- Theme Toggle Button -->
+    <button id="themeToggle" class="theme-toggle sun" title="Toggle Theme">
+      ☀️
+    </button>
+
+    <!-- Login Form -->
+    <div
+      class="container d-flex justify-content-center align-items-center vh-100"
+    >
+      <div class="card shadow-lg" style="width: 28rem">
+        <div class="card-header text-center">
+          <h3 class="card-title">Login</h3>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript for Theme Toggle -->
+    <script>
+      const themeToggleButton = document.getElementById("themeToggle");
+      const themeStylesheet = document.getElementById("themeStylesheet");
+      const nightSky = document.getElementById("nightSky");
+      let isDarkMode = false;
+
+      // Function to create stars
+      function createStars() {
+        const numberOfStars = 100;
+        for (let i = 0; i < numberOfStars; i++) {
+          const star = document.createElement('div');
+          star.className = 'star';
+          // Random position
+          star.style.left = `${Math.random() * 100}%`;
+          star.style.top = `${Math.random() * 100}%`;
+          // Random twinkle delay
+          star.style.animationDelay = `${Math.random() * 2}s`;
+          nightSky.appendChild(star);
+        }
+      }
+
+      // Create stars on page load
+      createStars();
+
+      themeToggleButton.addEventListener("click", () => {
+        isDarkMode = !isDarkMode;
+
+        // Simply update the href of existing stylesheet
+        themeStylesheet.href = isDarkMode
+          ? "https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/darkly/bootstrap.min.css"
+          : "https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/flatly/bootstrap.min.css";
+
+        // Update button appearance
+        themeToggleButton.classList.toggle("sun", !isDarkMode);
+        themeToggleButton.classList.toggle("moon", isDarkMode);
+        themeToggleButton.innerHTML = isDarkMode ? "🌙" : "☀️";
+
+        // Toggle night sky visibility
+        nightSky.style.display = isDarkMode ? "block" : "none";
+      });
+    </script>
+  </body>
+</html>
