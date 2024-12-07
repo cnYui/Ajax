@@ -52,6 +52,104 @@
           color 0.3s ease;
       }
 
+      /* Cloud styles */
+      .clouds {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .cloud {
+        position: absolute;
+        background: white;
+        border-radius: 50px;
+        opacity: 0.8;
+        animation: moveCloud linear infinite;
+        border: 2px solid skyblue;
+      }
+
+      .cloud::before,
+      .cloud::after {
+        content: "";
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        border: 2px solid skyblue;
+      }
+
+      .cloud:nth-child(1) {
+        width: 100px;
+        height: 40px;
+        top: 20%;
+        animation-duration: 30s;
+      }
+      .cloud:nth-child(1)::before {
+        width: 50px;
+        height: 50px;
+        top: -20px;
+        left: 15px;
+      }
+      .cloud:nth-child(1)::after {
+        width: 40px;
+        height: 40px;
+        top: -15px;
+        left: 45px;
+      }
+
+      .cloud:nth-child(2) {
+        width: 120px;
+        height: 45px;
+        top: 40%;
+        animation-duration: 35s;
+        animation-delay: -15s;
+      }
+      .cloud:nth-child(2)::before {
+        width: 55px;
+        height: 55px;
+        top: -25px;
+        left: 20px;
+      }
+      .cloud:nth-child(2)::after {
+        width: 45px;
+        height: 45px;
+        top: -18px;
+        left: 55px;
+      }
+
+      .cloud:nth-child(3) {
+        width: 80px;
+        height: 35px;
+        top: 60%;
+        animation-duration: 25s;
+        animation-delay: -5s;
+      }
+      .cloud:nth-child(3)::before {
+        width: 45px;
+        height: 45px;
+        top: -18px;
+        left: 12px;
+      }
+      .cloud:nth-child(3)::after {
+        width: 35px;
+        height: 35px;
+        top: -13px;
+        left: 35px;
+      }
+
+      @keyframes moveCloud {
+        from {
+          left: -150px;
+        }
+        to {
+          left: 100%;
+        }
+      }
+
       /* Night sky and stars styles */
       .night-sky {
         display: none;
@@ -62,7 +160,7 @@
         height: 100%;
         pointer-events: none;
       }
-      
+
       /* Static stars */
       .star {
         position: absolute;
@@ -74,10 +172,14 @@
       }
 
       @keyframes twinkle {
-        0% { opacity: 0.3; }
-        100% { opacity: 1; }
+        0% {
+          opacity: 0.3;
+        }
+        100% {
+          opacity: 1;
+        }
       }
-      
+
       .shooting-star {
         position: absolute;
         width: 4px;
@@ -89,7 +191,7 @@
       }
 
       .shooting-star::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
@@ -110,34 +212,41 @@
         }
       }
 
-      .shooting-star:nth-child(1) { 
+      .shooting-star:nth-child(1) {
         animation-delay: 0s;
-        top: 0%;
+        top: -40%;
         left: random(100%);
       }
-      .shooting-star:nth-child(2) { 
+      .shooting-star:nth-child(2) {
         animation-delay: 1.6s;
-        top: 10%;
+        top: -10%;
         left: random(100%);
       }
-      .shooting-star:nth-child(3) { 
+      .shooting-star:nth-child(3) {
         animation-delay: 3.2s;
-        top: 5%;
-        left: random(100%);
-      }
-      .shooting-star:nth-child(4) { 
-        animation-delay: 4.8s;
         top: 15%;
         left: random(100%);
       }
-      .shooting-star:nth-child(5) { 
+      .shooting-star:nth-child(4) {
+        animation-delay: 4.8s;
+        top: 25%;
+        left: random(100%);
+      }
+      .shooting-star:nth-child(5) {
         animation-delay: 6.4s;
-        top: 8%;
+        top: -40%;
         left: random(100%);
       }
     </style>
   </head>
   <body>
+    <!-- Clouds for Light Theme -->
+    <div class="clouds" id="clouds">
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+      <div class="cloud"></div>
+    </div>
+
     <!-- Night Sky with Stars -->
     <div class="night-sky" id="nightSky">
       <!-- Shooting stars -->
@@ -195,14 +304,15 @@
       const themeToggleButton = document.getElementById("themeToggle");
       const themeStylesheet = document.getElementById("themeStylesheet");
       const nightSky = document.getElementById("nightSky");
+      const clouds = document.getElementById("clouds");
       let isDarkMode = false;
 
       // Function to create stars
       function createStars() {
         const numberOfStars = 100;
         for (let i = 0; i < numberOfStars; i++) {
-          const star = document.createElement('div');
-          star.className = 'star';
+          const star = document.createElement("div");
+          star.className = "star";
           // Random position
           star.style.left = `${Math.random() * 100}%`;
           star.style.top = `${Math.random() * 100}%`;
@@ -230,6 +340,8 @@
 
         // Toggle night sky visibility
         nightSky.style.display = isDarkMode ? "block" : "none";
+        // Toggle clouds visibility
+        clouds.style.display = isDarkMode ? "none" : "block";
       });
     </script>
   </body>
